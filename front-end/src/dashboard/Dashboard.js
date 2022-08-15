@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
+import { today, previous, next } from "../utils/date-time"
 import ErrorAlert from "../layout/ErrorAlert";
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 
 /**
  * Defines the dashboard page.
@@ -12,6 +13,7 @@ import { useLocation } from 'react-router-dom'
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const history = useHistory();
 
   function useQuery() {
     const { search } = useLocation();
@@ -35,6 +37,16 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  function previousDay(date) {
+    const previousDate = previous(date)
+    history.push(`/dashboard?date=${previousDate}`)
+  }
+
+  function nextDay(date) {
+    const nextDate = next(date);
+    history.push(`/dashboard?date=${nextDate}`)
+  }
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -42,7 +54,50 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <div>
+        <button onClick={ () => previousDay(date)}>Previous Day</button>
+        <button onClick={ () => history.push(`/dashboard?date=${today()}`)}>Today</button>
+        <button onClick={() => nextDay(date)}>Next Day</button>
+      </div>
+      <div>
+        {reservations[0] ? 
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Mobile Number</th>
+              <th>Time of Reservation</th>
+              <th>Size of Party</th>
+              {/* <th>Edit</th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {reservations.map((reservation, index) => {
+              return (
+                <tr key={reservation.reservation_id}>
+                  <td>
+                    <p>{reservation.first_name} {reservation.last_name}</p>
+                  </td>
+                  <td>
+                    <p>{reservation.mobile_number}</p>
+                  </td>
+                  <td>
+                    <p>{reservation.reservation_time}</p>
+                  </td>
+                  <td>
+                    <p>{reservation.people}</p>
+                  </td>
+                  {/* <td>
+                      <button name="edit" onClick={editReservation}>Edit</button>
+                  </td> */}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        : <p>No reservations on {date}</p> }
+      </div>
+
     </main>
   );
 }
