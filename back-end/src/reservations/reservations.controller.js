@@ -29,7 +29,8 @@ function bodyDataHas(propertyName) {
 }
 
 function peopleIsValidNumber(req, res, next){
-  const { data: { people }  = {} } = req.body;
+  let { data: { people }  = {} } = req.body;
+  people = Number(people);
   if (people <= 0 || !Number.isInteger(people)){
       return next({
           status: 400,
@@ -65,7 +66,9 @@ function timeIsValidTime(req, res, next) {
 }
 
 async function create(req, res) {
-  const data = await service.create(req.body.data);
+  const body = req.body.data;
+  body.people = Number(body.people)
+  const data = await service.create(body);
   res.status(201).json({data});
 }
 

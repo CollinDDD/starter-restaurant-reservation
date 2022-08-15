@@ -5,8 +5,9 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
-const API_BASE_URL = "https://periodic-tables-backend-cjr.herokuapp.com"
+const API_BASE_URL = "http://localhost:5001"
   // process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
+  // "https://periodic-tables-backend-cjr.herokuapp.com"
 
 /**
  * Defines the default headers for these functions to work with `json-server`
@@ -66,4 +67,9 @@ export async function listReservations(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+export async function createReservation(newReservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  return await fetchJson(url, {headers, signal, method: "POST", body: JSON.stringify(newReservation)}, [])
 }
