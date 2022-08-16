@@ -24,7 +24,7 @@ function bodyDataHas(propertyName) {
     if (data[propertyName]) {
       return next();
     }
-    next({ status: 400, message: `Reservation must include a ${propertyName}` });
+    next({ status: 400, message: `Reservation must include ${propertyName}` });
   };
 }
 
@@ -80,6 +80,16 @@ function timeIsValidTime(req, res, next) {
       status: 400,
       message: `Reservation must have a valid reservation_time`
     });
+  } else if (reservation_time < "10:30") {
+    return next({
+      status: 400,
+      message: `Reservation cannot be before 10:30 AM.`
+    });
+  } else if (reservation_time > "21:30") {
+    return next({
+      status: 400,
+      message: `Reservation cannot be after 9:30 PM.`
+    })
   }
   next()
 }
