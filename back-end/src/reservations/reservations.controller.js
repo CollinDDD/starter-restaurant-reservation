@@ -41,14 +41,33 @@ function peopleIsValidNumber(req, res, next){
 }
 
 function dateIsValidDate(req, res, next) {
-  const {data: {reservation_date} = {}} = req.body;
+  const {data: {reservation_date, reservation_time} = {}} = req.body;
+  const date = new Date(reservation_date + "T" + reservation_time)
+  const now = new Date()
   if (!Date.parse(reservation_date)) {
     return next({
       status: 400,
       message: `Reservation must have a valid reservation_date`
     });
+  } else if (date.getDay() === 2 && date < now) {
+    return next({
+      status: 400,
+      message: `Periodic Tables is closed on Tuesdays. Reservations also must be made in the future. Please choose a different date and time.`
+    })
+  } else if (date.getDay() === 2) {
+    return next({
+      status: 400,
+      message: `Periodic Tables is closed on Tuesdays. Please choose a different date and time.`
+    })
+  } else if (date < now) {
+    return next({
+      status: 400,
+      message: `Reservations must be made in the future. Please choose a different date and time.`
+    })
+  } else {
+    next()
   }
-  next()
+  
 }
 
 function timeIsValidTime(req, res, next) {
