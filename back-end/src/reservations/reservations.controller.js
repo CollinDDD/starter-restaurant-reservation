@@ -1,5 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 const service = require("./reservations.service")
+const {bodyDataHas} = require("../utils/middleware")
 
 /**
  * List handler for reservation resources
@@ -18,19 +19,8 @@ async function list(req, res) {
   });
 }
 
-function bodyDataHas(propertyName) {
-  return function (req, res, next) {
-    const { data = {} } = req.body;
-    if (data[propertyName]) {
-      return next();
-    }
-    next({ status: 400, message: `Reservation must include ${propertyName}` });
-  };
-}
-
 function peopleIsValidNumber(req, res, next){
   let { data: { people }  = {} } = req.body;
-  people = Number(people);
   if (people <= 0 || !Number.isInteger(people)){
       return next({
           status: 400,
@@ -96,9 +86,26 @@ function timeIsValidTime(req, res, next) {
 
 async function create(req, res) {
   const body = req.body.data;
-  body.people = Number(body.people)
   const data = await service.create(body);
   res.status(201).json({data});
+}
+
+async function reservationExists(req, res, next) {
+  const reservation = await service.read(req.params.reservation_id);
+  if (reservation) {
+      res.locals.reservation = reservation
+      next();
+  } else {
+      next({
+          status: 404,
+          message: `Reservation cannot be found: ${req.params.reservation_id}`
+      })
+  }
+}
+
+function read(req, res) {
+  const data = res.locals.reservation;
+  res.json({data})
 }
 
 module.exports = {
@@ -114,5 +121,9 @@ module.exports = {
     dateIsValidDate,
     timeIsValidTime,
     asyncErrorBoundary(create),
+  ],
+  read: [
+    asyncErrorBoundary(reservationExists),
+    read,
   ]
 };

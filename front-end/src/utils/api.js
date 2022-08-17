@@ -5,7 +5,7 @@
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
-const API_BASE_URL = "http://localhost:5001"
+const API_BASE_URL = "https://periodic-tables-backend-cjr.herokuapp.com"
   // process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
   // "https://periodic-tables-backend-cjr.herokuapp.com"
 
@@ -76,11 +76,15 @@ export async function createReservation(newReservation, signal) {
 
 export async function createTable(newTable, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  const result = await fetchJson(url, {headers, signal, method: "POST", body: JSON.stringify(newTable)}, [])
-  return result
+  return await fetchJson(url, {headers, signal, method: "POST", body: JSON.stringify(newTable)}, [])
 }
 
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, {headers, signal}, [])
+}
+
+export async function seatReservation(table_id, reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await fetchJson(url, {headers, signal, method: "PUT", body: JSON.stringify(reservation)}, [])
 }

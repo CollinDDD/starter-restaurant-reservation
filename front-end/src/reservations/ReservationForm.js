@@ -25,7 +25,13 @@ function ReservationForm({reservationId = "", reservation = ""}) {
     }, [reservation])
 
     const handleChange = ({target}) => {
-        setFormData({...formData, [target.name]: target.value})
+        let value = null;
+        if (target.name === "people") {
+            value = Number(target.value);
+        } else {
+            value = target.value;
+        }
+        setFormData({...formData, [target.name]: value})
     }
 
     const handleSubmit = async (event) => {
