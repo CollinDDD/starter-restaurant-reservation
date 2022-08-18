@@ -13,7 +13,6 @@ async function list(req, res) {
   }
 
   const data = await service.listForDate(date);
-
   res.json({
     data
   });
@@ -28,6 +27,18 @@ function peopleIsValidNumber(req, res, next){
       });
   }
   next();
+}
+
+function statusIsBooked(req, res, next) {
+  const {data: {status} = {}} = req.body;
+  if (status === "booked" || !status) {
+    return next()
+  } else {
+    return next({
+      status: 400,
+      message: `Reservation cannot have a status of ${status} when created.`
+    });
+  }
 }
 
 function dateIsValidDate(req, res, next) {
@@ -108,6 +119,35 @@ function read(req, res) {
   res.json({data})
 }
 
+function statusIsValid(req, res, next) {
+  const statuses = ["booked", "seated", "finished"];
+  const currentStatus = res.locals.reservation.status
+  const newStatus = req.body.data.status;
+
+  if (currentStatus === "finished") {
+    return next({
+      status: 400,
+      message: `Cannot update status of already finished reservation.`
+    })
+  } else if (!statuses.includes(newStatus)) {
+    return next({
+      status: 400,
+      message: `Status must be booked, seated, or finished. Cannot be ${newStatus}`
+    })
+  }
+  next()
+}
+
+async function updateStatus(req, res) {
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status: req.body.data.status
+  }
+
+  const data = await service.update(updatedReservation)
+  res.json({data})
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -117,6 +157,7 @@ module.exports = {
     bodyDataHas("reservation_date"),
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
+    statusIsBooked,
     peopleIsValidNumber,
     dateIsValidDate,
     timeIsValidTime,
@@ -125,5 +166,10 @@ module.exports = {
   read: [
     asyncErrorBoundary(reservationExists),
     read,
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    statusIsValid,
+    asyncErrorBoundary(updateStatus)
   ]
 };

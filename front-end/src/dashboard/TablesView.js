@@ -8,22 +8,22 @@ function TablesView({tables}) {
     const history = useHistory();
 
     const [error, setError] = useState(null)
-    const [tableId, setTableId] = useState(null)
+    const [table, setTable] = useState(null)
 
 
     useEffect(() => {
-        if (tableId) {
-           handleFinish(tableId) 
+        if (table) {
+           handleFinish(table) 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tableId])
+    }, [table])
 
-    async function handleFinish(tableId) {
+    async function handleFinish(table) {
         const abortController = new AbortController();
         const result = window.confirm("Is this table ready to seat new guests? This cannot be undone.");
         if (result) {
             try {
-                await finishTable(tableId, abortController.signal)
+                await finishTable(table.table_id, abortController.signal)
                 history.go()
             } catch (error) {
                 setError(error)
@@ -61,7 +61,7 @@ function TablesView({tables}) {
                             </td>
                             {reservation_id ? 
                                 <td>
-                                    <button data-table-id-finish={table.table_id} onClick={() => setTableId(table.table_id)}>Finish</button>
+                                    <button data-table-id-finish={table.table_id} onClick={() => setTable(table)}>Finish</button>
                                 </td>
                                 : <td></td>
                             }
