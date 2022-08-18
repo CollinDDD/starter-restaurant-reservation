@@ -10,6 +10,7 @@ async function list(req, res) {
 
 async function tableExists(req, res, next) {
     const table = await service.read(req.params.table_id);
+
     if (table) {
         res.locals.table = table
         return next();
@@ -96,6 +97,18 @@ function tableAlreadyOccupied(req, res, next) {
     next()
 }
 
+function tableNotOccupied(req, res, next) {
+    const {reservation_id} = res.locals.table;
+
+    if (!reservation_id) {
+        return next({
+            status: 400,
+            message: `Table not occupied. Can't clear seated reservation.`
+        })
+    }
+    next()
+}
+
 async function create(req, res, next) {
     const body = req.body.data; 
     const data = await service.create(body);
@@ -106,6 +119,16 @@ async function update(req, res) {
     const updatedTable = {
         ...res.locals.table,
         reservation_id: req.body.data.reservation_id
+    }
+
+    const data = await service.update(updatedTable)
+    res.json({data})
+}
+
+async function deleteSeated(req, res) {
+    const updatedTable = {
+        ...res.locals.table,
+        reservation_id: null
     }
 
     const data = await service.update(updatedTable)
@@ -127,5 +150,10 @@ module.exports = {
         asyncErrorBoundary(tableCapacity),
         tableAlreadyOccupied,
         asyncErrorBoundary(update)
+    ],
+    deleteSeated: [
+        asyncErrorBoundary(tableExists),
+        tableNotOccupied,
+        asyncErrorBoundary(deleteSeated)
     ]
 }
