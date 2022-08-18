@@ -1,6 +1,6 @@
 import React from "react"
 
-function ReservationsView({reservations, date}) {
+function ReservationsView({reservations}) {
     return (
         <div>
             {reservations[0] ? 
@@ -54,7 +54,7 @@ function ReservationsView({reservations, date}) {
                 
                 </tbody>
             </table>
-            : <p>No reservations on {date}</p> }
+            : <p>No reservations found.</p> }
         </div>
     )
 }

@@ -66,7 +66,7 @@ function Dashboard({ date }) {
         <button className="btn btn-primary" onClick={ () => history.push(`/dashboard?date=${today()}`)}>Today</button>
         <button className="btn btn-primary" onClick={() => nextDay(date)}>Next Day</button>
       </div>
-      <ReservationsView reservations={reservations} date={date} />
+      <ReservationsView reservations={reservations} />
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>
       </div>

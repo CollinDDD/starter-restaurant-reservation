@@ -6,13 +6,18 @@ const {bodyDataHas} = require("../utils/middleware")
  * List handler for reservation resources
  */
 async function list(req, res) {
-  let {date} = req.query
+  let {date, mobile_number} = req.query
   if (!date) {
     todayDate = new Date();
     date = `${todayDate.getFullYear()}-${(todayDate.getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}-${todayDate.getDate().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`
   }
+  let data
+  if (mobile_number) {
+    data = await service.search(mobile_number)
+  } else {
+    data = await service.listForDate(date);
+  }
 
-  const data = await service.listForDate(date);
   res.json({
     data
   });

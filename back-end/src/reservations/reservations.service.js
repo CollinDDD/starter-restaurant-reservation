@@ -8,6 +8,15 @@ function listForDate(date) {
     return knex("reservations").select("*").whereNot({status: "finished"}).andWhere({reservation_date: date}).orderBy("reservation_time");
 }
 
+function search(mobile_number) {
+    return knex("reservations")
+      .whereRaw(
+        "translate(mobile_number, '() -', '') like ?",
+        `%${mobile_number.replace(/\D/g, "")}%`
+      )
+      .orderBy("reservation_date");
+}
+
 function create(newReservation) {
     return knex("reservations")
         .insert(newReservation)
@@ -36,4 +45,5 @@ module.exports = {
     create,
     read,
     update,
+    search
 }

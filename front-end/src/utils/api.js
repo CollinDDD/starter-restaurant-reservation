@@ -94,7 +94,7 @@ export async function finishTable(table_id, signal) {
   return await fetchJson(url, {headers, signal, method: "DELETE"}, [])
 }
 
-// export async function updateReservationStatus(reservation_id, reservationStatus, signal) {
-//   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
-//   return await fetchJson(url, {headers, signal, method: "PUT", body: JSON.stringify(reservationStatus)}, [])
-// }
+export async function searchNumber(mobile_number, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${mobile_number}`)
+  return await fetchJson(url, {headers, signal}, [])
+}
