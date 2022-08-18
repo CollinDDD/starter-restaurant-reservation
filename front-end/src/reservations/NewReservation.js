@@ -1,6 +1,6 @@
 import React from "react";
 import ReservationForm from "./ReservationForm"
-// import ErrorAlert from "../layout/ErrorAlert";
+
 
 function NewReservation() {
     return (

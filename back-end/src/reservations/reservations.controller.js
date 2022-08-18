@@ -79,8 +79,10 @@ function dateIsValidDate(req, res, next) {
 function timeIsValidTime(req, res, next) {
   const {data: {reservation_time} = {}} = req.body;
   const time = reservation_time.split(":")
-  const hour = Number(time[0]);
-  const minutes = Number(time[1]);
+  // const hour = Number(time[0]);
+  // const minutes = Number(time[1]);
+  const hour = time[0]
+  const minutes = time[1]
   if (!hour || !minutes || hour > 24 || hour < 0 || minutes > 59 || minutes < 0) {
     return next({
       status: 400,
@@ -125,7 +127,7 @@ function read(req, res) {
 }
 
 function statusIsValid(req, res, next) {
-  const statuses = ["booked", "seated", "finished"];
+  const statuses = ["booked", "seated", "finished", "cancelled"];
   const currentStatus = res.locals.reservation.status
   const newStatus = req.body.data.status;
 
@@ -141,6 +143,16 @@ function statusIsValid(req, res, next) {
     })
   }
   next()
+}
+
+async function update(req, res) {
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id
+  }
+
+  const data = await service.update(updatedReservation)
+  res.json({data})
 }
 
 async function updateStatus(req, res) {
@@ -176,5 +188,18 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     statusIsValid,
     asyncErrorBoundary(updateStatus)
+  ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    bodyDataHas("first_name"), 
+    bodyDataHas("last_name"), 
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    peopleIsValidNumber,
+    dateIsValidDate,
+    timeIsValidTime,
+    asyncErrorBoundary(update)
   ]
 };

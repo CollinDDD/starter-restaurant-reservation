@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api"
+import { createReservation, updateReservation } from "../utils/api"
 import ErrorAlert from "../layout/ErrorAlert";
 
 function ReservationForm({reservationId = "", reservation = ""}) {
@@ -38,8 +38,12 @@ function ReservationForm({reservationId = "", reservation = ""}) {
         event.preventDefault();
         const abortController = new AbortController();
         if (reservationId) {
-            console.log("create update api")
-            history.goBack()
+            try {
+                await updateReservation(reservationId, {data: formData}, abortController.signal)
+                history.push(`/dashboard?date=${formData.reservation_date}`)
+            } catch (error) {
+                setError(error)
+            }
         }  else {
             try {
                 await createReservation({ data: formData }, abortController.signal)
