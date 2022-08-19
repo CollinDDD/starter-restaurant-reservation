@@ -26,7 +26,7 @@ function ReservationEdit() {
                 setReservation(reservationFromAPI)}
                 )
             .catch(setError);
-            return () => abortController.abort();
+        return () => abortController.abort();
     }
 
     return (
