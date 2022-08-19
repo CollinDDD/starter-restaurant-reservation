@@ -10,7 +10,8 @@ This restaurant reservation fullstack application was made as my final project f
 
 ## Features
 
-ADD SCREENSHOTS
+ - View existing reservations and tables on the Dashboard:
+ - 
 
 ## API Endpoints
 
