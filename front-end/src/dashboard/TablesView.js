@@ -34,10 +34,10 @@ function TablesView({tables}) {
     }
 
     return (
-        <div>
+        <div className="table-responsive">
             {tables[0] ? 
             <table className="table">
-                <thead>
+                <thead className="thead-dark">
                     <tr>
                         <th>Table Name</th>
                         <th>Capacity</th>

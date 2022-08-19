@@ -48,8 +48,10 @@ function NewTable() {
                     Capacity
                     <input id="capacity" name="capacity" type="number" className="form-control" onChange={handleChange} value={formData.capacity}/>
                 </label>
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
+                <div>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button> 
+                </div>
             </form>
             <ErrorAlert error={error} />
         </main>

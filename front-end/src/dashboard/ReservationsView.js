@@ -31,10 +31,10 @@ function ReservationsView({reservations}) {
     }
 
     return (
-        <div>
+        <div className="table-responsive">
             {reservations[0] ? 
             <table className="table">
-                <thead>
+                <thead className="thead-dark">
                     <tr>
                     <th>Name</th>
                     <th>Mobile Number</th>
@@ -43,6 +43,7 @@ function ReservationsView({reservations}) {
                     <th>Status</th>
                     <th>Seat</th>
                     <th>Edit</th>
+                    <th>Cancel</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -26,14 +26,15 @@ function SearchForm() {
 
     return (
         <main>
+            <h1>Search for Reservation by Mobile Number</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="mobile_number" className="form-label">
                     Mobile Number
-                    <input id="mobile_number" name="mobile_number" placeholder="Enter a customer's phone number." type="text" className="form-control" onChange={handleChange} value={mobileNumber} />
+                    <input id="mobile_number" name="mobile_number" placeholder="Enter a customer's phone number." type="text" className="form-control" style={{width: 275, marginRight: 10}} onChange={handleChange} value={mobileNumber} />
                 </label>
                 <button type="submit" className="btn btn-primary">Find</button>
             </form>
-            <ReservationsView reservations={reservations} />
+            {mobileNumber ? <ReservationsView reservations={reservations} /> : null}
             <ErrorAlert error={error} />
         </main>
     )

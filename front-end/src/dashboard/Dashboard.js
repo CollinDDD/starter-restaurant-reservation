@@ -62,9 +62,9 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError || tablesError} />
       <div>
-        <button className="btn btn-primary" onClick={ () => previousDay(date)}>Previous Day</button>
-        <button className="btn btn-primary" onClick={ () => history.push(`/dashboard?date=${today()}`)}>Today</button>
-        <button className="btn btn-primary" onClick={() => nextDay(date)}>Next Day</button>
+        <button className="btn btn-primary" style={{margin: 5}} onClick={ () => previousDay(date)}>Previous Day</button>
+        <button className="btn btn-primary" style={{margin: 5}} onClick={ () => history.push(`/dashboard?date=${today()}`)}>Today</button>
+        <button className="btn btn-primary" style={{margin: 5}} onClick={() => nextDay(date)}>Next Day</button>
       </div>
       <ReservationsView reservations={reservations} />
       <div className="d-md-flex mb-3">

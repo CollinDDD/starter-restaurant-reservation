@@ -82,8 +82,11 @@ function ReservationForm({reservationId = "", reservation = ""}) {
                     Number of People
                     <input id="people" name="people" type="number" className="form-control" onChange={handleChange} value={formData.people}/>
                 </label>
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
+                <div>
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
+                </div>
+                
             </form>
             <ErrorAlert error={error} />
         </div>
