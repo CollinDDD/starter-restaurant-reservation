@@ -12,7 +12,7 @@ function ReservationForm({reservationId = "", reservation = ""}) {
         mobile_number: "",
         reservation_date: "",
         reservation_time: "",
-        people: 0
+        people: 0,
     }
 
     const [formData, setFormData] = useState(initialFormState)
@@ -26,7 +26,7 @@ function ReservationForm({reservationId = "", reservation = ""}) {
 
     const handleChange = ({target}) => {
         let value = null;
-        if (target.name === "people") {
+        if (target.name === "people" && target.value) {
             value = Number(target.value);
         } else {
             value = target.value;
@@ -58,35 +58,46 @@ function ReservationForm({reservationId = "", reservation = ""}) {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="first_name" className="form-label">
-                    First Name
-                    <input id="first_name" name="first_name" type="text" className="form-control" onChange={handleChange} value={formData.first_name} />
-                </label>
-                <label htmlFor="last_name" className="form-label">
-                    Last Name
-                    <input id="last_name" name="last_name" type="text" className="form-control" onChange={handleChange} value={formData.last_name} />
-                </label>
-                <label htmlFor="mobile_number" className="form-label">
-                    Mobile Number
-                    <input id="mobile_number" name="mobile_number" type="text" className="form-control" onChange={handleChange} value={formData.mobile_number} />
-                </label>
-                <label htmlFor="reservation_date" className="form-label">
-                    Date
-                    <input id="reservation_date" name="reservation_date" type="date" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" className="form-control" onChange={handleChange} value={formData.reservation_date} />
-                </label>
-                <label htmlFor="reservation_time" className="form-label">
-                    Time
-                    <input id="reservation_time" name="reservation_time" type="time" placeholder="HH:MM" pattern="[0-9]{2}:[0-9]{2}" className="form-control" onChange={handleChange} value={formData.reservation_time} />
-                </label>
-                <label htmlFor="people" className="form-label">
-                    Number of People
-                    <input id="people" name="people" type="number" className="form-control" onChange={handleChange} value={formData.people}/>
-                </label>
-                <div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                    <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
+                <div className="form-group">
+                    <label htmlFor="first_name" className="form-label">
+                        First Name
+                        <input id="first_name" name="first_name" type="text" className="form-control" onChange={handleChange} value={formData.first_name} />
+                    </label>
                 </div>
-                
+                <div className="form-group">
+                    <label htmlFor="last_name" className="form-label">
+                        Last Name
+                        <input id="last_name" name="last_name" type="text" className="form-control" onChange={handleChange} value={formData.last_name} />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="mobile_number" className="form-label">
+                        Mobile Number
+                        <input id="mobile_number" name="mobile_number" type="text" className="form-control" onChange={handleChange} value={formData.mobile_number} />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="reservation_date" className="form-label">
+                        Date
+                        <input id="reservation_date" name="reservation_date" type="date" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" className="form-control" onChange={handleChange} value={formData.reservation_date} />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="reservation_time" className="form-label">
+                        Time
+                        <input id="reservation_time" name="reservation_time" type="time" placeholder="HH:MM" pattern="[0-9]{2}:[0-9]{2}" className="form-control" onChange={handleChange} value={formData.reservation_time} />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="people" className="form-label">
+                        Number of People
+                        <input id="people" name="people" type="number" className="form-control" onChange={handleChange} value={formData.people}/>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" className="btn btn-primary mr-2">Submit</button>
+                    <button type="button" className="btn btn-secondary mr-2" onClick={() => history.goBack()}>Cancel</button>
+                </div>
             </form>
             <ErrorAlert error={error} />
         </div>

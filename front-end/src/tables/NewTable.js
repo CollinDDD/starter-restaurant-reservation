@@ -40,17 +40,21 @@ function NewTable() {
         <main>
             <h1>Create Table</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="table_name" className="form-label">
-                    Table Name
-                    <input id="table_name" name="table_name" type="text" className="form-control" onChange={handleChange} value={formData.table_name} />
-                </label>
-                <label htmlFor="capacity" className="form-label">
-                    Capacity
-                    <input id="capacity" name="capacity" type="number" className="form-control" onChange={handleChange} value={formData.capacity}/>
-                </label>
+                <div className="form-group">
+                    <label htmlFor="table_name" className="form-label">
+                        Table Name
+                        <input id="table_name" name="table_name" type="text" className="form-control" onChange={handleChange} value={formData.table_name} />
+                    </label>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="capacity" className="form-label">
+                        Capacity
+                        <input id="capacity" name="capacity" type="number" className="form-control" onChange={handleChange} value={formData.capacity}/>
+                    </label>
+                </div>
                 <div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                    <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button> 
+                    <button type="submit" className="btn btn-primary mr-2">Submit</button>
+                    <button type="button" className="btn btn-secondary mr-2" onClick={() => history.goBack()}>Cancel</button> 
                 </div>
             </form>
             <ErrorAlert error={error} />
