@@ -11,7 +11,28 @@ This restaurant reservation fullstack application was made as my final project f
 ## Features
 
  - View existing reservations and tables on the Dashboard:
- - 
+ 
+ ![Dashboard view](/screenshots/dashboard.png "Dashboard")
+ 
+ - Create new reservations:
+ 
+ ![New reservation form](/screenshots/create-reservation.png "New reservation form")
+ 
+ - Create new table: 
+ 
+ ![New table form](/screenshots/create-table.png "New table form")
+ 
+ - Edit existing reservation:
+ 
+ ![Edit reservation form](/screenshots/edit-reservation.png "Edit reservation form")
+ 
+ - Seat reservation at free table (only tables not occupied available to select):
+ 
+ ![Seat reservation form](/screenshots/seat.png "Seat reservation form")
+ 
+ - Search for existing reservtaion by mobile number:
+ 
+ ![Search by mobile number](/screenshots/search.png "Search by mobile number")
 
 ## API Endpoints
 
