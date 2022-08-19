@@ -40,17 +40,27 @@ function ReservationSeat() {
         <main>
             <h1>Seat Reservation</h1>
             <form onSubmit={handleSubmit}>
-                <label>
-                    <select name="table_id" value={tableId} onChange={((event) => setTableId(event.target.value))}>
-                        {tables.map(table => {
-                            return (
-                                <option key={table.table_id} value={table.table_id}>{table.table_name} - {table.capacity}</option>
-                            )
-                        })}
-                    </select>
-                </label>
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <button type="button" className="btn btn-secondary" onClick={() => history.goBack()}>Cancel</button>
+                <div className="form-group">
+                    <label htmlFor="table_id" className="form-label">
+                        <select name="table_id" id="table-id" className="form-control" value={tableId} onChange={((event) => setTableId(event.target.value))}>
+                            {tables.map(table => {
+                                if (!table.reservation_id) {
+                                    return (
+                                        <option key={table.table_id} value={table.table_id}>{table.table_name} - {table.capacity}</option>
+                                    )
+                                } else {
+                                    return null
+                                }
+                                
+                            })}
+                        </select>
+                    </label>
+                </div>
+                <div>
+                        <button type="submit" className="btn btn-primary mr-2">Submit</button>
+                    <button type="button" className="btn btn-secondary mr-2" onClick={() => history.goBack()}>Cancel</button>
+                </div>
+                
             </form>
             <ErrorAlert error={tablesError} />
         </main>
