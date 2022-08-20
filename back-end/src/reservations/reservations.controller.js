@@ -34,6 +34,18 @@ function peopleIsValidNumber(req, res, next){
   next();
 }
 
+function mobileNumberIsNumeric(req, res, next) {
+  let { data: {mobile_number} ={} } = req.body;
+  let regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+  if (!regex.test(mobile_number)) {
+    return next({
+      status: 400,
+      message: `mobile_number must be only numbers (dashes and parantheses allowed where appropriate)`
+    });
+  }
+  next();
+}
+
 function statusIsBooked(req, res, next) {
   const {data: {status} = {}} = req.body;
   if (status === "booked" || !status) {
@@ -176,6 +188,7 @@ module.exports = {
     bodyDataHas("people"),
     statusIsBooked,
     peopleIsValidNumber,
+    mobileNumberIsNumeric,
     dateIsValidDate,
     timeIsValidTime,
     asyncErrorBoundary(create),
@@ -198,6 +211,7 @@ module.exports = {
     bodyDataHas("reservation_time"),
     bodyDataHas("people"),
     peopleIsValidNumber,
+    mobileNumberIsNumeric,
     dateIsValidDate,
     timeIsValidTime,
     asyncErrorBoundary(update)
