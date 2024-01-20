@@ -28,7 +28,7 @@ async function hasOnlyValidProperties(req, res, next) {
       return true;
     }
 
-    if (field === 'reservation_date') {
+    if (field === "reservation_date") {
       return isNaN(new Date(data[field]).getTime());
     }
 
@@ -50,6 +50,54 @@ async function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
+async function hasValidDateAndTime(req, res, next) {
+  const { data = {} } = req.body;
+
+  for (const field of Object.keys(data)) {
+    if (!VALID_PROPERTIES.includes(field)) {
+      return next({
+        status: 400,
+        message: `Invalid field(s): ${field}`,
+      });
+    }
+
+    if (field === "reservation_date") {
+      const reservationDate = new Date(data[field]);
+      // Check if the reservation_date is in the future
+      if (reservationDate <= new Date()) {
+        return next({
+          status: 400,
+          message: `You must choose a future date.`,
+        }); // Invalid if in the past
+      }
+      if (reservationDate.getDay() === 1) {
+        return next({
+          status: 400,
+          message: `The restaurant is closed on Tuesdays.`,
+        });
+      }
+      // Check if the reservation_date is set on Tuesday
+      
+    }
+
+    if (field === "reservation_time") {
+      // Parse the reservation_time to get hours and minutes
+      const [hours, minutes] = data[field].split(':').map(Number);
+
+      // Check if the reservation_time is between 10:30am and 9:30pm
+      if (hours < 10 || (hours === 10 && minutes < 30) || hours > 21 || (hours === 21 && minutes > 30)) {
+        return next({
+          status: 400,
+          message: `Reservation time must be between 10:30am and 9:30pm.`,
+        });
+      }
+    }
+  }
+
+  next();
+}
+
+
 
 
 function peopleIsValidNumber(req, res, next) {
@@ -64,6 +112,8 @@ function peopleIsValidNumber(req, res, next) {
 
   next();
 }
+
+
 
 
 
@@ -91,6 +141,6 @@ async function list(req, res, next) {
 
 
 module.exports = {
-  list,
-  create: [hasOnlyValidProperties, hasRequiredProperties, peopleIsValidNumber, create],
+  list: asyncErrorBoundary(list),
+  create: [asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(hasRequiredProperties), asyncErrorBoundary(peopleIsValidNumber), asyncErrorBoundary(hasValidDateAndTime), asyncErrorBoundary(create)],
 };
