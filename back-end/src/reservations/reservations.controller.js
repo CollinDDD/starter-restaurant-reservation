@@ -1,5 +1,4 @@
 const reservationsService = require("./reservations.service.js");
-
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasRequiredProperties = hasProperties(
@@ -122,12 +121,26 @@ async function create(req, res, next) {
     .create(req.body.data)
     .then((data) => res.status(201).json({ data }))
     .catch(next);
-
 }
 
-/**
- * List handler for reservation resources
- */
+async function reservationExists (req, res, next) {
+  const reservation = await reservationsService.read(req.params.reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    next();
+  } else {
+    next({
+      status: 404,
+      message: `Reservation cannot be found: ${req.params.reservation_id}`
+    });
+  }
+};
+
+function read(req, res) {
+  const data = res.locals.reservation;
+  res.json({data})
+}
+
 async function list(req, res, next) {
   const { date } = req.query;
   const reservationDate = reservationsService.list(date);
@@ -142,5 +155,11 @@ async function list(req, res, next) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(hasRequiredProperties), asyncErrorBoundary(peopleIsValidNumber), asyncErrorBoundary(hasValidDateAndTime), asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
+  create: [
+    asyncErrorBoundary(hasOnlyValidProperties), 
+    asyncErrorBoundary(hasRequiredProperties), 
+    asyncErrorBoundary(peopleIsValidNumber), 
+    asyncErrorBoundary(hasValidDateAndTime), 
+    asyncErrorBoundary(create)],
 };
