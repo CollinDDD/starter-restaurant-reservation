@@ -58,7 +58,7 @@ This restaurant reservation fullstack application was made as my final project f
  - Frontend: JavaScript, HTML, CSS, React, React Router, Bootstrap
  - Backend: JavaScript, Node.js, Express, Knex
  - Database: PostgreSQL
- - Tools: Heroku, Git, GitHub, VSCode, Puppeteer
+ - Tools: Render, Git, GitHub, VSCode, Puppeteer
 
 ## Installation
 
